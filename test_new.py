@@ -18,9 +18,6 @@ class UserManager:
             print(f'{user_type} {name} succesfully created !')
 
 
-##################
-################
-
 manager = UserManager()
 
 print('TEST 1 : ')
