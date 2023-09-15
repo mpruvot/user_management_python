@@ -7,11 +7,10 @@ class UserType(Enum):
 class UserManager:
     # class attribute common to all
     user_list =[]
-    def __init__(self, role: str, name: str):
-        self.role = role
-        self.name = name
-    
+   
         
+    
+
     
     
     
