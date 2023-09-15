@@ -3,16 +3,18 @@ from enum import Enum
 class UserType(Enum):
     ADMIN = "admin"
     GUEST = "guest"
+
+class UserAlreadyExist(Exception):
+    pass
     
 class UserManager:
     # class attribute common to all
-    user_list =[]
-    def __init__(self, role: str, name: str):
-        self.role = role
-        self.name = name
-    
-        
-    
+    user_dict ={UserType.ADMIN : [], UserType.GUEST : []}
+    def new(self, user_type: UserType, name: str):
+        if name in UserManager.user_dict[user_type]:
+            raise UserAlreadyExist(f'User {name} already exist.')
+        else: 
+            UserManager.user_dict[user_type].append(name)
     
     
     
