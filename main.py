@@ -27,7 +27,8 @@ class UserManager:
                 UserManager.user_list.remove((user_type, name))
                 print(f'{user_type}: {name} succefully deleted !')
             else:
-                raise UserDoesNotExist(f"{user_type} {name} does not exist !")
+                raise UserDoesNotExist(f"{user_type} {name} does not exist !")         
+    
         
 
     
