@@ -29,6 +29,12 @@ class UserManager:
             else:
                 raise UserDoesNotExist(f"{user_type} {name} does not exist !")
             
+    def get(self, user_type: UserType, name: str):
+        if (user_type, name) in UserManager.user_list:
+            return (user_type, name)
+        else:
+            raise UserDoesNotExist(f"{user_type} {name} does not exist !")
+            
     
 
 manager = UserManager()
@@ -42,16 +48,19 @@ except UserAlreadyExist as e:
     print(e)
 print(f'USERLIST >>>>>>>>>>>>>>>>> {manager.user_list}')
 
-print('TEST DELETE ADMIN')
+print('TEST GET ADMIN')
 try:
-    manager.delete(UserType.ADMIN, "Marius")
+    result = manager.get(UserType.ADMIN, "Marius")
+    print(result)
 except UserDoesNotExist as e:
     print(e)
 print(f'USERLIST >>>>>>>>>>>>>>>>> {manager.user_list}')
-    
-print('TEST DELETE ADMIN WHO DOES NOT EXIST')
+
+print('TEST GET ADMIN WHO DOES NOT EXIST')
+manager.delete(UserType.ADMIN, "Marius")
 try:
-    manager.delete(UserType.ADMIN, "Marius")
+    result = manager.get(UserType.ADMIN, "Marius")
+    print(result)
 except UserDoesNotExist as e:
     print(e)
 print(f'USERLIST >>>>>>>>>>>>>>>>> {manager.user_list}')
