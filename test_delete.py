@@ -27,6 +27,32 @@ class UserManager:
                 UserManager.user_list.remove((user_type, name))
                 print(f'{user_type}: {name} succefully deleted !')
             else:
-                raise UserDoesNotExist(f"{user_type} {name} does not exist !")         
+                raise UserDoesNotExist(f"{user_type} {name} does not exist !")
+            
     
+
+manager = UserManager()
+
+############# TESTS ###############
+
+print('TEST CREATE ADMIN')
+try:
+    manager.new(UserType.ADMIN, "Marius")
+except UserAlreadyExist as e:
+    print(e)
+print(f'USERLIST >>>>>>>>>>>>>>>>> {manager.user_list}')
+
+print('TEST DELETE ADMIN')
+try:
+    manager.delete(UserType.ADMIN, "Marius")
+except UserDoesNotExist as e:
+    print(e)
+print(f'USERLIST >>>>>>>>>>>>>>>>> {manager.user_list}')
+    
+print('TEST DELETE ADMIN WHO DOES NOT EXIST')
+try:
+    manager.delete(UserType.ADMIN, "Marius")
+except UserDoesNotExist as e:
+    print(e)
+print(f'USERLIST >>>>>>>>>>>>>>>>> {manager.user_list}')
 
