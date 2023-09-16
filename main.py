@@ -1,23 +1,21 @@
-from enum import Enum
+from enum import Enum, auto
 
 class UserType(Enum):
-    ADMIN = "admin"
-    GUEST = "guest"
+    ADMIN = auto()
+    GUEST = auto()
 
 class UserAlreadyExist(Exception):
     pass
     
 class UserManager:
     # class attribute common to all
-    user_dict ={UserType.ADMIN : [], UserType.GUEST : []}
+    user_list = []
     def new(self, user_type: UserType, name: str):
-        if name in UserManager.user_dict[user_type]:
-            raise UserAlreadyExist(f'User {name} already exist.')
+        if (user_type, name) in UserManager.user_list:
+            raise UserAlreadyExist( f'{user_type} {name} already exist !')
         else: 
-            UserManager.user_dict[user_type].append(name)
-    
-    
-    
-    
-# if role in [e.value for e in UserType]: 
-    
+            UserManager.user_list.append((user_type, name))
+            print(f'{user_type}: {name} succesfully created !')
+            return (user_type, name)
+        
+

@@ -1,46 +1,53 @@
-from enum import Enum
+from enum import Enum, auto
 
 class UserType(Enum):
-    ADMIN = "admin"
-    GUEST = "guest"
+    ADMIN = auto()
+    GUEST = auto()
 
 class UserAlreadyExist(Exception):
     pass
     
 class UserManager:
     # class attribute common to all
-    user_dict ={UserType.ADMIN : [], UserType.GUEST : []}
+    user_list = []
     def new(self, user_type: UserType, name: str):
-        if name in UserManager.user_dict[user_type]:
-            raise UserAlreadyExist(f'{user_type.value} {name} already exist !')
+        if (user_type, name) in UserManager.user_list:
+            raise UserAlreadyExist( f'{user_type} {name} already exist !')
         else: 
-            UserManager.user_dict[user_type].append(name)
-            print(f'{user_type} {name} succesfully created !')
+            UserManager.user_list.append((user_type, name))
+            print(f'{user_type}: {name} succesfully created !')
+            return (user_type, name)
+        
 
 
 manager = UserManager()
 
-print('TEST 1 : ')
+############# TESTS ###############
+
+print('test create admin')
 try:
     manager.new(UserType.ADMIN, "Marius")
 except UserAlreadyExist as e:
     print(e)
 
-print('TEST 2 : ')
+print('test duplicate admin')
 try:
     manager.new(UserType.ADMIN, "Marius")
 except UserAlreadyExist as e:
     print(e)
 
-print('TEST 3 : ')
+print('test create guest')
 try:
     manager.new(UserType.GUEST, "Marius")
 except UserAlreadyExist as e:
     print(e)
 
-print('TEST 4 : ')
+print('test duplicate guest')
 try:
     manager.new(UserType.GUEST, "Marius")
 except UserAlreadyExist as e:
     print(e)
+    
+print('test return of .new')
+print(manager.new(UserType.GUEST, "coucou"))
 
