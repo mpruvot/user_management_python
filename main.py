@@ -9,6 +9,9 @@ class UserAlreadyExist(Exception):
 
 class UserDoesNotExist(Exception):
     pass
+
+class EmptyUserList(Exception):
+    pass
     
 class UserManager:
     # class attribute common to all
@@ -33,6 +36,13 @@ class UserManager:
             return (user_type, name)
         else:
             raise UserDoesNotExist(f"{user_type} {name} does not exist !")
-            
+    
+    def all(self):
+        if UserManager.user_list:
+            return UserManager.user_list
+        else:
+            raise EmptyUserList(f'User_list is empty !')
+        
+        
     
 
