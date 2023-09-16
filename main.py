@@ -29,6 +29,4 @@ class UserManager:
             else:
                 raise UserDoesNotExist(f"{user_type} {name} does not exist !")         
     
-        
 
-    
