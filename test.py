@@ -1,14 +1,13 @@
 import unittest
-from main import UserType, UserManager, UserAlreadyExist, UserDoesNotExist, EmptyUserList
+from main import UserType, UserManager
+from my_exceptions import UserAlreadyExist, UserDoesNotExist, EmptyUserList
 
 class TestUserManager(unittest.TestCase):
     # setUp is called beafore every tests
     def setUp(self) -> None:
         # initialize test_manager before every tests
-        self.test_manager = UserManager() 
-        # initialize class list before every tests !
-        UserManager.user_list = []
-        
+        self.test_manager = UserManager(user_list =[])
+
     def test_new(self):
         result = self.test_manager.new(UserType.ADMIN, "marius")
         self.assertEqual(result,(UserType.ADMIN, "marius"))
