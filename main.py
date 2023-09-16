@@ -28,6 +28,12 @@ class UserManager:
                 print(f'{user_type}: {name} succefully deleted !')
             else:
                 raise UserDoesNotExist(f"{user_type} {name} does not exist !")         
+    def get(self, user_type: UserType, name: str):
+        if (user_type, name) in UserManager.user_list:
+            return (user_type, name)
+        else:
+            raise UserDoesNotExist(f"{user_type} {name} does not exist !")
+            
     
         
 
