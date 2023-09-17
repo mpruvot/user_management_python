@@ -1,6 +1,6 @@
 import unittest
 from main import UserType, UserManager
-from my_exceptions import UserAlreadyExistError, UserNotFoundError, EmptyUserListError
+from my_exceptions import UserAlreadyExistError, UserNotFoundError
 
 class TestUserManager(unittest.TestCase):
     # setUp is called beafore every tests
