@@ -35,12 +35,27 @@ class UserManager:
             raise UserNotFoundError(logging.exception(f"{user_type} {name} does not exist !"))
     
     def all(self):
+        '''return list with all users created'''
         if self.user_list:
             return self.user_list
         else:
             raise EmptyUserListError(logging.exception("List is Empty !"))
+    
+    def get_by_type(self, user_type: UserType):
+        '''return list of users by type'''
+        if not any(user_type in i for i in self.user_list):
+            raise UserNotFoundError(logging.exception(f"List of {user_type} is empty !"))
+        return [item for item in self.user_list if user_type in item]
+        
+        
+        
+        
+            
         
 class User:
     def __init__(self, name: str, role: UserType):
         self.name = name
         self.role = role
+
+
+# https://stackoverflow.com/questions/2191699/find-an-element-in-a-list-of-tuples

@@ -40,6 +40,12 @@ class TestUserManager(unittest.TestCase):
             self.test_manager.all()
         result = self.test_manager.new(UserType.ADMIN, "marius")
         self.assertEqual(result,(UserType.ADMIN, "marius"))
+        
+    def test_get_by_type(self):
+        with self.assertRaises(UserNotFoundError):
+            self.test_manager.get_by_type(UserType.ADMIN)
+        self.test_manager.new(UserType.ADMIN, 'marius')
+        self.assertEqual(self.test_manager.user_list, [(UserType.ADMIN, 'marius')])
              
 if __name__ == '__main__':
     unittest.main()
