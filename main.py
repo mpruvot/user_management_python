@@ -33,12 +33,14 @@ class UserManager:
             return (user_type, name)
         else:
             raise UserNotFoundError(logging.exception(f"{user_type} {name} does not exist !"))
-
+    
+    def all(self):
+        if self.user_list:
+            return self.user_list
+        else:
+            raise EmptyUserListError(logging.exception("List is Empty !"))
+        
 class User:
     def __init__(self, name: str, role: UserType):
         self.name = name
         self.role = role
-    
-    
-    
-
