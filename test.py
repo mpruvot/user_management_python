@@ -1,6 +1,6 @@
 import unittest
 from main import UserType, UserManager
-from my_exceptions import UserAlreadyExistError, UserNotFoundError
+from my_exceptions import UserAlreadyExistError, UserNotFoundError, EmptyUserListError
 
 class TestUserManager(unittest.TestCase):
     # setUp is called beafore every tests
@@ -34,7 +34,12 @@ class TestUserManager(unittest.TestCase):
     def test_get_UserNotFoundError(self):
         with self.assertRaises(UserNotFoundError):                
             self.test_manager.get(UserType.ADMIN, "marius")
-
+        
+    def test_all(self):
+        with self.assertRaises(EmptyUserListError):
+            self.test_manager.all()
+        result = self.test_manager.new(UserType.ADMIN, "marius")
+        self.assertEqual(result,(UserType.ADMIN, "marius"))
              
 if __name__ == '__main__':
     unittest.main()
