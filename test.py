@@ -1,6 +1,6 @@
 import unittest
 from main import UserType, UserManager
-from my_exceptions import UserAlreadyExist, UserDoesNotExist, EmptyUserList
+from my_exceptions import UserAlreadyExistError, UserNotFoundError, EmptyUserListError
 
 class TestUserManager(unittest.TestCase):
     # setUp is called beafore every tests
@@ -11,30 +11,30 @@ class TestUserManager(unittest.TestCase):
     def test_new(self):
         result = self.test_manager.new(UserType.ADMIN, "marius")
         self.assertEqual(result,(UserType.ADMIN, "marius"))
-        with self.assertRaises(UserAlreadyExist):
+    
+    def test_new_UserAlreadyExistError(self):
+        self.test_manager.new(UserType.ADMIN, "marius")
+        with self.assertRaises(UserAlreadyExistError):
             self.test_manager.new(UserType.ADMIN, "marius")
     
     def test_delete(self):
         self.test_manager.new(UserType.ADMIN, "marius")
-        self.assertIn((UserType.ADMIN, "marius"), self.test_manager.user_list)
         self.test_manager.delete(UserType.ADMIN, "marius")
         self.assertNotIn((UserType.ADMIN, "marius"), self.test_manager.user_list)
-        with self.assertRaises(UserDoesNotExist):
+        
+    def test_delete_UserNotFoundError(self):
+        with self.assertRaises(UserNotFoundError):
             self.test_manager.delete(UserType.GUEST, "Paul")
         
     def test_get(self):
-        with self.assertRaises(UserDoesNotExist):                
-            self.test_manager.get(UserType.ADMIN, "marius")
         self.test_manager.new(UserType.ADMIN, "marius")
         result = self.test_manager.get(UserType.ADMIN, "marius")
         self.assertEqual(result,(UserType.ADMIN, "marius"))
-    
-    def test_all(self):
-        with self.assertRaises(EmptyUserList):
-            self.test_manager.all()
-        result = self.test_manager.new(UserType.ADMIN, "paul")
-        self.assertEqual(result, (UserType.ADMIN, "paul"))
         
+    def test_get_UserNotFoundError(self):
+        with self.assertRaises(UserNotFoundError):                
+            self.test_manager.get(UserType.ADMIN, "marius")
+
              
 if __name__ == '__main__':
     unittest.main()

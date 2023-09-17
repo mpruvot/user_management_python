@@ -1,9 +1,9 @@
-class UserAlreadyExist(Exception):
+class UserAlreadyExistError(Exception):
     pass
 
-class UserDoesNotExist(Exception):
+class UserNotFoundError(Exception):
     pass
 
-class EmptyUserList(Exception):
+class EmptyUserListError(Exception):
     pass
     
