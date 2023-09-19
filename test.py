@@ -54,6 +54,15 @@ class TestUserManager(unittest.TestCase):
         test_user = User('marius', UserType.ADMIN)
         self.test_manager.add(test_user)
         self.assertEqual(self.test_manager.user_list, [(UserType.ADMIN, 'marius')])
+    
+    def test_multiple_add(self):
+        users = [User('marius', UserType.ADMIN), User('paul', UserType.GUEST)]
+        self.test_manager.multiple_add(users)
+        self.assertEqual(self.test_manager.user_list, [(UserType.ADMIN, 'marius'), (UserType.GUEST, 'paul')])
+        
+        with self.assertRaises(EmptyUserListError):
+            self.test_manager.multiple_add([])
+            
              
 if __name__ == '__main__':
     unittest.main()

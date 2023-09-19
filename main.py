@@ -67,6 +67,14 @@ class UserManager:
             logging.exception('UserNotFoundError')
             raise UserNotFoundError(f'user : {user} does not exist !')
         self.new(user.role, user.name)    
+    
+    def multiple_add(self, users: list[User]):
+        if not users:
+            logging.exception('EmptyUsersListError')
+            raise EmptyUserListError(f"List {users} is Empty !")
+        for i in users:
+            self.user_list.append((i.role , i.name))
+        
         
         
 
