@@ -9,6 +9,12 @@ class UserType(Enum):
     ADMIN = auto()
     GUEST = auto()
 
+class User:
+    def __init__(self, name: str, role: UserType):
+        self.name = name
+        self.role = role
+  #def __eq__(self, other):
+
 class UserManager:
     # class attribute common to all
     def __init__(self, user_list: list) -> None:
@@ -55,17 +61,16 @@ class UserManager:
             raise UserNotFoundError(f"List of {user_type} is empty !")
         return [item for item in self.user_list if user_type in item]
     
-    class User:
-        def __init__(self, name: str, role: UserType):
-            self.name = name
-            self.role = role
-        def __eq__(self, other):
-            if isinstance(other, User):
-                return self.role == other.role
-            return False
-        def __gt__(self, other):
-            pass 
+    def add(self, user: User):
+        '''Add a User (Class) to Userlist (Manager)'''
+        if user is None or user.name is None or user.role is None:
+            logging.exception('UserNotFoundError')
+            raise UserNotFoundError(f'user : {user} does not exist !')
+        self.new(user.role, user.name)    
+        
+        
 
+        
 # https://stackoverflow.com/questions/2191699/find-an-element-in-a-list-of-tuples
 
 # https://www.pythontutorial.net/python-oop/python-__eq__/
