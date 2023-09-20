@@ -13,7 +13,11 @@ class User:
     def __init__(self, name: str, role: UserType):
         self.name = name
         self.role = role
-  #def __eq__(self, other):
+    def __eq__(self, other):
+        if not isinstance(other, User):
+            return False
+        return self.name == other.name and self.user_type == other.user_type
+
 
 class UserManager:
     # class attribute common to all
@@ -22,13 +26,14 @@ class UserManager:
         
     def new(self, user_type: UserType, name: str):
         '''create and store a new user in user_list'''
-        if (user_type, name) in self.user_list:
+        new_user = User(name, user_type)
+        if (new_user) in self.user_list:
             logging.exception('UserAlreadyExistError')
             raise UserAlreadyExistError(f'{user_type} {name} already exist !')
         else: 
-            self.user_list.append((user_type, name))
+            self.user_list.append(new_user)
             logging.info(f'{user_type}: {name} succesfully created !')
-            return (user_type, name)
+            return (new_user)
                 
     def delete(self, user_type: UserType, name: str):
         '''delete a user from user_list raise UserNotFoundError if not found'''
