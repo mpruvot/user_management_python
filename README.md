@@ -16,6 +16,7 @@ Créez un enum `UserType` pour représenter les types d'utilisateurs (par exempl
 *(cf [Python Enum documentation](https://docs.python.org/fr/3/library/enum.html))*
 
 #### Méthodes à implémenter
+
 1. `new(self, user_type: UserType, name: str) -> User`: Crée un nouvel utilisateur, l'ajoute à `user_list`, et le retourne. Pas de doublon autorisé.  
     - **Exception**: `UserAlreadyExist`
     
