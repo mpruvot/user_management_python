@@ -10,7 +10,6 @@ class TestUserManager(unittest.TestCase):
         self.user1 = User('marius', UserType.ADMIN)
         self.user2 = User('paul', UserType.ADMIN)
 
-
     def test_new(self): 
         self.test_manager.new(UserType.ADMIN, 'marius')
         self.assertIn(self.user1, self.test_manager.users)

@@ -29,7 +29,7 @@ Créez un enum `UserType` pour représenter les types d'utilisateurs (par exempl
 4. `all(self) -> list[User | None]`: Retourne tous les utilisateurs.
 
 5. `get_by_type(self, type: UserType) -> list[User]`: Retourne tous les utilisateurs de ce type.
-
+x
 6. `add(self, user: User) -> None`: Ajoute l'utilisateur à la liste.
 
 7. `multiple_add(self, users: list[user])`: Ajoute les utilisateurs à la liste.
