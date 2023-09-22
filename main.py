@@ -13,10 +13,35 @@ class User:
     def __init__(self, name: str, role: UserType):
         self.name = name
         self.role = role
+    @property
+    def is_admin(self):
+        return self.role == UserType.ADMIN
+
     def __eq__(self, other):
         if not isinstance(other, User):
             return False
         return self.name == other.name and self.role == other.role
+    def __gt__(self, other):
+        if not isinstance(other, User):
+            return False
+        if self.role == UserType.ADMIN and other.role == UserType.GUEST:
+            return True
+        return False
+    def __lt__(self, other):
+        if not isinstance(other, User):
+            return False
+        if self.role == UserType.GUEST and other.role == UserType.ADMIN:
+            return True
+        return False
+    def __str__(self) -> str:
+        return f"User: {self.name}, Role: {self.role.name}"
+
+    
+    
+    @property
+    def is_admin(self):
+        return self.role == UserType.ADMIN
+
 
 class UserManager:
     # class attribute common to all
