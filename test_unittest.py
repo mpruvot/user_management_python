@@ -1,4 +1,5 @@
 import unittest
+import pytest
 from main import UserType, UserManager, User
 from my_exceptions import UserAlreadyExistError, UserNotFoundError, EmptyUserListError
 

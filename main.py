@@ -1,18 +1,27 @@
 from enum import Enum, auto
 import logging
+import typer
+import json
+import cmd
 from my_exceptions import UserAlreadyExistError, UserNotFoundError, EmptyUserListError
 
-logging.basicConfig(level=logging.INFO, filename="log.log", filemode='w',
-                    format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    filename="log.log",
+    filemode="w",
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
 
 class UserType(Enum):
     ADMIN = auto()
     GUEST = auto()
 
+
 class User:
     def __init__(self, name: str, role: UserType):
         self.name = name
         self.role = role
+
     @property
     def is_admin(self):
         return self.role == UserType.ADMIN
@@ -21,112 +30,132 @@ class User:
         if not isinstance(other, User):
             return False
         return self.name == other.name and self.role == other.role
+
     def __gt__(self, other):
         if not isinstance(other, User):
             return False
         if self.role == UserType.ADMIN and other.role == UserType.GUEST:
             return True
         return False
+
     def __lt__(self, other):
         if not isinstance(other, User):
             return False
         if self.role == UserType.GUEST and other.role == UserType.ADMIN:
             return True
         return False
+
     def __str__(self) -> str:
         return f"User: {self.name}, Role: {self.role.name}"
-
     
-    
-    @property
-    def is_admin(self):
-        return self.role == UserType.ADMIN
-
-
 class UserManager:
     # class attribute common to all
     def __init__(self, users: list[User]) -> None:
         self.users = users
-        
+
     def new(self, user_type: UserType, name: str):
-        '''create and store a new user in users'''
+        """create and store a new user in users"""
         new_user = User(name, user_type)
         # check with __eq__
         if new_user in self.users:
-            logging.exception('UserAlreadyExistError')
-            raise UserAlreadyExistError(f'{user_type} {name} already exist !')
-        else: 
+            logging.exception("UserAlreadyExistError")
+            raise UserAlreadyExistError(f"{user_type} {name} already exist !")
+        else:
             self.users.append(new_user)
-            logging.info(f'{user_type}: {name} succesfully created !')
+            logging.info(f"{user_type}: {name} succesfully created !")
             return new_user
-                
+
     def delete(self, user_type: UserType, name: str):
-        '''delete a user from users raise UserNotFoundError if not found'''
+        """delete a user from users raise UserNotFoundError if not found"""
         user_found = False
         for user in self.users:
             if user.name == name and user.role == user_type:
                 self.users.remove(user)
-                logging.info(f'{user_type}: {name} succefully deleted !') 
+                logging.info(f"{user_type}: {name} succefully deleted !")
                 user_found = True
                 break
         if not user_found:
-            logging.exception('UserNotFoundError')
+            logging.exception("UserNotFoundError")
             raise UserNotFoundError(f"{user_type} {name} does not exist !")
-        
     
+    def delete_by_role(self, user_type: UserType):
+        """delete all user with specified role raise UserNotFoundError if not found"""
+        users_to_delete = [user for user in self.users if user.role == user_type]
+        
+        if not users_to_delete:
+            logging.exception("UserNotFoundError")
+            raise UserNotFoundError(f"No users of type {user_type} found!")
+        
+        for user in users_to_delete:
+            self.users.remove(user)
+            logging.info(f"{user_type} {user.name}: successfully deleted!")
+
     def get(self, user_type: UserType, name: str):
-        '''return (user_type, name) from users if (user_type, name) in users'''
+        """return (User) from users if (user_type, name) in users"""
         for user in self.users:
             if user.name == name and user.role == user_type:
-                return(user)
+                return user
         else:
-            logging.exception('UserNotFoundError')
+            logging.exception("UserNotFoundError")
             raise UserNotFoundError(f"{user_type} {name} does not exist !")
-    
+
     def all(self):
-        '''return list with all users created'''
+        """return list with all users created"""
         if self.users:
             return self.users
         else:
-            logging.exception('EmptyUserListError')
+            logging.exception("EmptyUserListError")
             raise EmptyUserListError("List is Empty !")
-    
+
     def get_by_type(self, user_type: UserType):
-        '''return list of users by type'''
+        """return list of users by type"""
         if not self.users:
-            logging.exception('EmptyUserListError')
+            logging.exception("EmptyUserListError")
             raise EmptyUserListError("List is Empty !")
-        
+
         user_by_type = [user for user in self.users if user.role == user_type]
-        
+
         if not user_by_type:
-            logging.exception('EmptyUserListError')
+            logging.exception("EmptyUserListError")
             raise EmptyUserListError("List is Empty !")
-        
+
         return user_by_type
-    
+
     def add(self, user: User):
-        '''Add a User (Class) to Userlist (Manager)'''
+        """Add a User (Class) to Userlist (Manager)"""
         if not isinstance(user, User) or user in self.users:
-            logging.exception('UserAlreadyExistError')
-            raise UserAlreadyExistError(f'{user.role} {user.name} already exist !')
-        self.users.append(user)    
-    
+            logging.exception("UserAlreadyExistError")
+            raise UserAlreadyExistError(f"{user.role} {user.name} already exist !")
+        self.users.append(user)
+
     def multiple_add(self, users: list[User]):
         for item in users:
             try:
                 self.add(item)
             except UserAlreadyExistError as e:
-                logging.exception(f'{e} = {item.role} {item.name}')
+                logging.exception(f"{e} = {item.role} {item.name}")
 
-               
-                
-            
-            
-                
-        
+    def save(self):
+        if not self.users:
+            logging.exception("EmptyUserListError")
+            raise EmptyUserListError("List is Empty !")
 
-        
+        admins = []
+        guests = []
+        for user in self.users:
+            if user.is_admin:
+                admins.append(user.name)
+            else:
+                guests.append(user.name)
+
+        to_save = {"admins": admins, "guests": guests}
+
+
+
+if __name__ == '__main__':
+    pass
+
+
 # https://stackoverflow.com/questions/2191699/find-an-element-in-a-list-of-tuples
 
 # https://www.pythontutorial.net/python-oop/python-__eq__/
